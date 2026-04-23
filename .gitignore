@@ -11,6 +11,7 @@ override.tf.json
 *.pem
 *.key
 .env
+k3s-key
 .env.local
 
 # Ansible
