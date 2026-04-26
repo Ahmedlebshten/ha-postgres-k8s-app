@@ -54,12 +54,14 @@ jobs:
           git config --global user.email "ahmed-bot@github.com"
           git config --global user.name "Ahmed DevOps Bot"
           
+          # Use absolute path with GITHUB_WORKSPACE to ensure sed finds the file
+          TARGET_FILE="$GITHUB_WORKSPACE/k8s-manifests/app-deployment.yml"
+          
           # Update the image tag in the deployment manifest
-          # Ensure the path 'k8s-manifests/app-deployment.yml' matches your repository structure
-          sed -i "s|image: ahmedlebshten/guestbook:.*|image: ahmedlebshten/guestbook:$VERSION|g" k8s-manifests/app-deployment.yml
+          sed -i "s|image: ahmedlebshten/guestbook:.*|image: ahmedlebshten/guestbook:$VERSION|g" $TARGET_FILE
           
           # Commit and Push the change with [skip ci] to prevent infinite pipeline loops
-          git add k8s-manifests/app-deployment.yml
+          git add $TARGET_FILE
           git commit -m "chore: update image to $VERSION [skip ci]"
           git push origin main
 
@@ -67,5 +69,8 @@ jobs:
       - name: Apply to K3s Cluster
         run: |
           echo "Applying the updated manifest to the production cluster..."
-          kubectl apply -f k8s-manifests/app-deployment.yml
+          # Applying the manifest from the specific path in workspace
+          kubectl apply -f $GITHUB_WORKSPACE/k8s-manifests/app-deployment.yml
+          
+          # Verify the rollout
           kubectl rollout status deployment/guestbook-app
