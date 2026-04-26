@@ -9,7 +9,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
 # install dependencies and build
       - name: Install Dependencies & Build
@@ -35,7 +35,7 @@ jobs:
 
 # security scan with trivy
       - name: Run Trivy Security Scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.20.0
         with:
           image-ref: 'ahmedlebshten/guestbook:${{ github.sha }}'
           format: 'table'
