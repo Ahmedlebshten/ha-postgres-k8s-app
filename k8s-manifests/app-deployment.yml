@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: guestbook
-        image: ahmedlebshten/guestbook:v1
+        image: ahmedlebshten/guestbook:v11
         ports:
         - containerPort: 3000
         # HPA
