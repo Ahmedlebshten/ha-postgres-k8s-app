@@ -23,7 +23,7 @@ jobs:
         run: |
           VERSION="v${{ github.run_number }}"
           echo "Building Version: $VERSION"
-          docker build -t ahmedlebshten/guestbook:$VERSION .
+          docker build --no-cache -t ahmedlebshten/guestbook:$VERSION .
           docker tag ahmedlebshten/guestbook:$VERSION ahmedlebshten/guestbook:latest
 
       # Step 2: Security Gate - Scan Image for Vulnerabilities
