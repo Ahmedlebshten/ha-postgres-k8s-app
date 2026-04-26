@@ -106,7 +106,6 @@ resource "aws_instance" "k3s_node" {
     Name = "ai-chat-k3s-node"
   }
 }
-
 # Dynamically generate the Ansible inventory file containing the new Public IP
 resource "local_file" "ansible_inventory" {
   content  = <<-EOT
@@ -114,4 +113,11 @@ resource "local_file" "ansible_inventory" {
 ${aws_instance.k3s_node.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=../terraform/k3s-key
   EOT
   filename = "${path.module}/../ansible/inventory.ini"
+
+  lifecycle {
+    replace_triggered_by = [
+      aws_instance.k3s_node.public_ip
+    ]
+  }
 }
+
